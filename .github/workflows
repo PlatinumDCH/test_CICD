@@ -3,10 +3,10 @@ name: Python CI
 on:
   push:
     branches:
-      - main
+      - main  # Запуск при пуше в ветку main
   pull_request:
     branches:
-      - main
+      - main  # Запуск при pull request в ветку main
 
 jobs:
   build:
@@ -19,17 +19,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11'  # Установите вашу версию Python
+          python-version: '3.11'  # Установка Python версии 3.11
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -  # Установка Poetry
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Установка зависимостей из файла
+          poetry install  # Установка зависимостей через Poetry
 
       - name: Run tests
         run: |
-          pytest  # Запуск тестов через pytest
+          poetry run pytest  # Запуск тестов через Poetry
 
       - name: Lint code
         run: |
-          flake8 .  # Проверка кода на стиль с помощью flake8
+          poetry run flake8 .  # Линтинг кода с использованием flake8
