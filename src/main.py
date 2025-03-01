@@ -5,6 +5,6 @@ app = FastAPI()
 @app.get('/')
 async def index(request:Request):
     return {
-        'message':'index page',
+        'message':'index page', 
         'base_url': request.base_url
     }
