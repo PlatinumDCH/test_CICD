@@ -14,12 +14,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # clone repo
+        uses: actions/checkout@v4 
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11' # install Python 3.11
+          python-version: '3.11'
 
       - name: Install Poetry
         run: |
@@ -29,8 +29,11 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-root  
 
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+
       - name: Run tests
         run: poetry run pytest --maxfail=3 --disable-warnings -v 
 
       - name: Lint code
-        run: poetry run flake8 .  
+        run: poetry run flake8 .
