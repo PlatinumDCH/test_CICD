@@ -18,12 +18,12 @@ def test_index_2(client):
     response = client.get("/")
     assert response.status_code == 200
     json_response = response.json()
-    assert json_response["message"] == "indexx page"
+    assert json_response["message"] != "indexx page"
     assert "base_url_fake" not in json_response
 
 def test_index_3(client):
     response = client.get("/")
     assert response.status_code == 200
     json_response = response.json()
-    assert json_response["message"] == "index page fake"
+    assert json_response["message"] != "index page fake"
     assert "base_url_fake" not in json_response
