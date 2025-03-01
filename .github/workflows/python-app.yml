@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: '3.11'  # Установка Python версии 3.11
 
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV  # Настройка PYTHONPATH для корректного импорта
+
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -  # Установка Poetry
@@ -36,3 +39,7 @@ jobs:
       - name: Lint code
         run: |
           poetry run flake8 .  # Линтинг кода с использованием flake8
+
+      - name: Run Pylint
+        run: |
+          poetry run pylint $(git ls-files '*.py')  # Проверка кода с использованием pylint
