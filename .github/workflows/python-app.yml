@@ -1,28 +1,52 @@
 name: python application test
 
 
-on: [push, pull_request]
-
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
-  build:
+  build-and-test:
+    runs-on: ubuntu-latest
 
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        poetry install --no-root
+
+    - name: Run tests
+      run: |
+        pytest
+
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.11'
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -  # Установка Poetry
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
 
-      - name: Install dependencies
-        run: |
-          poetry install  # Установка зависимостей через Poetry
+    - name: Install dependencies
+      run: |
+        poetry install --no-root
 
-      - name: Run tests
-        run: |
-          poetry run pytest  # Запуск тестов через Poetry
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production..."
