@@ -1,5 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
+
 from src.main import app
 
 @pytest.fixture
@@ -27,3 +28,4 @@ def test_index_3(client):
     json_response = response.json()
     assert json_response["message"] != "index page fake"
     assert "base_url_fake" not in json_response
+    

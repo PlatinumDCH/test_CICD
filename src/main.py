@@ -6,6 +6,6 @@ app = FastAPI()
 async def index(request:Request):
     """docs"""
     return {
-        'message':'index page', 
-        'base_url': request.base_url
+        'message' : 'index page', 
+        'base_url' : request.base_url
     }
