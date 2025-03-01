@@ -3,10 +3,10 @@ name: Python application test
 on:
   push:
     branches:
-      - main
+      - main  
   pull_request:
     branches:
-      - main
+      - main 
 
 jobs:
   build-and-test:
@@ -14,39 +14,28 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 #clone repo
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9'
+        python-version: '3.11' #install py 11
+
+    - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH 
+
+    - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH  
 
     - name: Install dependencies
-      run: |
-        poetry install --no-root
+        run: poetry install --no-interaction --no-root  
 
     - name: Run tests
-      run: |
-        pytest
+        run: poetry run pytest --maxfail=3 --disable-warnings -v 
 
-  deploy:
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        poetry install --no-root
-
-    - name: Deploy to production
-      run: |
-        echo "Deploying to production..."
+    - name: Lint code
+        run: poetry run flake8 . 
