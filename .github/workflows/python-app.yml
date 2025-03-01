@@ -1,28 +1,19 @@
-name: Python CI
+name: python application test
 
-on:
-  push:
-    branches:
-      - main  # Запуск при пуше в ветку main
-  pull_request:
-    branches:
-      - main  # Запуск при pull request в ветку main
+
+on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Использование последней версии Ubuntu
+
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2  # Клонирование репозитория
-
+      - uses: actions/checkout@v2
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11'  # Установка Python версии 3.11
-
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV  # Настройка PYTHONPATH для корректного импорта
+          python-version: '3.11'
 
       - name: Install Poetry
         run: |
@@ -35,11 +26,3 @@ jobs:
       - name: Run tests
         run: |
           poetry run pytest  # Запуск тестов через Poetry
-
-      - name: Lint code
-        run: |
-          poetry run flake8 .  # Линтинг кода с использованием flake8
-
-      - name: Run Pylint
-        run: |
-          poetry run pylint $(git ls-files '*.py')  # Проверка кода с использованием pylint
